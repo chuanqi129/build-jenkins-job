@@ -18,11 +18,12 @@ def mandatory_arg(argv):
 # mandatory
 JENKINS_URL = mandatory_arg(sys.argv[1])
 JENKINS_TOKEN = mandatory_arg(sys.argv[2])
-JENKINS_USER = mandatory_arg(sys.argv[3])
-JOB_PATH = mandatory_arg(sys.argv[4])
+JENKINS_TOKEN_NAME = mandatory_arg(sys.argv[3])
+JENKINS_USER = mandatory_arg(sys.argv[4])
+JOB_PATH = mandatory_arg(sys.argv[5])
 
 # not mandatory
-JOB_PARAMS = sys.argv[5] or '{}'
+JOB_PARAMS = sys.argv[6] or '{}'
 
 # create/connect jenkins server
 server = jenkins.Jenkins(f"http://{JENKINS_URL}", username=JENKINS_USER, password=JENKINS_TOKEN)
@@ -33,7 +34,7 @@ print(f"Hello {user['fullName']} from Jenkins {version}")
 # build job
 split = JOB_PATH.split("job/")
 job_name = "".join(split)
-server.build_job(job_name, parameters=json.loads(JOB_PARAMS), token=JENKINS_TOKEN)
+server.build_job(job_name, parameters=json.loads(JOB_PARAMS), token=JENKINS_TOKEN_NAME)
 queue_info = server.get_queue_info()
 queue_id = queue_info[0].get('id')
 
